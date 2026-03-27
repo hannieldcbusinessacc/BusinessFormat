@@ -175,74 +175,50 @@ footer{
 </style>
 </head>
 
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
 <script>
-  // Register the ScrollTrigger plugin
   gsap.registerPlugin(ScrollTrigger);
 
   document.addEventListener("DOMContentLoaded", () => {
     
-    // --- HERO ANIMATION (Runs on Page Load) ---
+    // FAIL-SAFE: Hide elements via JS so they only vanish if GSAP is active
+    gsap.set(".hero-box h1, .hero-box p, .hero-box .btn, #menu .card, #contact .card", { 
+      opacity: 0, 
+      y: 30 
+    });
+
     const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
-    tl.from(".navbar", { 
-      y: -100, 
-      duration: 1 
-    })
-    .from(".hero-box h1", { 
-      y: 50, 
-      opacity: 0, 
-      duration: 1 
-    }, "-=0.5") // Starts 0.5s early
-    .from(".hero-box p", { 
-      y: 30, 
-      opacity: 0, 
-      duration: 0.8 
-    }, "-=0.7")
-    .from(".hero-box .btn", { 
-      scale: 0.8, 
-      opacity: 0, 
-      duration: 0.5 
-    }, "-=0.5");
+    // Hero Entrance
+    tl.to(".hero-box h1", { opacity: 1, y: 0, duration: 1 })
+      .to(".hero-box p", { opacity: 1, y: 0, duration: 0.8 }, "-=0.6")
+      .to(".hero-box .btn", { opacity: 1, y: 0, duration: 0.6 }, "-=0.4");
 
-    // --- SCROLL ANIMATIONS (Menu Cards) ---
-    // This creates a "staggered" reveal for the cards
-    gsap.from("#menu .card", {
+    // Scroll Animations for Menu
+    gsap.to("#menu .card", {
       scrollTrigger: {
         trigger: "#menu",
-        start: "top 80%", // Animation starts when the top of the section hits 80% of viewport
+        start: "top 80%",
       },
-      y: 60,
-      opacity: 0,
+      opacity: 1,
+      y: 0,
+      stagger: 0.2,
       duration: 1,
-      stagger: 0.2, // 0.2 seconds between each card's start time
       ease: "power2.out"
     });
 
-    // --- CONTACT SECTION REVEAL ---
-    gsap.from("#contact .section-title", {
+    // Contact Cards
+    gsap.to("#contact .card", {
       scrollTrigger: {
         trigger: "#contact",
         start: "top 85%",
       },
-      y: 30,
-      opacity: 0,
-      duration: 1
-    });
-
-    gsap.from("#contact .card", {
-      scrollTrigger: {
-        trigger: "#contact .grid",
-        start: "top 90%",
-      },
-      scale: 0.9,
-      opacity: 0,
-      duration: 0.8,
+      opacity: 1,
+      y: 0,
       stagger: 0.1,
-      ease: "back.out(1.7)" // Adds a slight professional "pop"
+      duration: 0.8
     });
   });
 </script>
